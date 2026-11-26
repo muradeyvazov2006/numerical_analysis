@@ -1,37 +1,56 @@
-# Güneş Santrali Verisiyle Nümerik Analiz
 
-Nümerik Analiz'in üç temel konusu (sayısal integrasyon, en küçük kareler, kök bulma) gerçek bir güneş santrali verisine uygulanıyor. Her yöntem NumPy ile sıfırdan yazıldı, önce sonucu bilinen basit bir örnekte test edildi, sonra SciPy/NumPy'nin hazır fonksiyonlarıyla aynı sonucu verdiği kontrol edildi.
+# Numerical Analysis of Solar Power Generation Data
 
-**Veri:** [Kaggle – Solar Power Generation Data](https://www.kaggle.com/datasets/anikannal/solar-power-generation-data) (Ani Kannal). Hindistan'da bir güneş santrali (Plant 1), 22 inverter, 15 Mayıs – 17 Haziran 2020, 15 dakikada bir ölçüm.
+This project applies three fundamental topics in numerical analysis — numerical integration, least-squares approximation, and root finding — to real-world solar power generation data.
 
-## Defterler
+The numerical methods are implemented using NumPy, tested on simple examples with known analytical solutions, and validated against built-in SciPy and NumPy functions.
 
-### 1. Sayısal integrasyon – [`01_integrasyon.ipynb`](notebooks/01_integrasyon.ipynb)
-Trapez, Simpson ve Romberg ile günlük enerji (kWh), inverterin kendi enerji sayacıyla karşılaştırıldı.
+**Dataset:** [Kaggle – Solar Power Generation Data](https://www.kaggle.com/datasets/anikannal/solar-power-generation-data) (Ani Kannal).
 
-> 15 dakikalık veride trapez kuralı günlük enerjiyi %0,3 hatayla buluyor ve bu veride Simpson ile Romberg'den daha isabetli.
+The dataset contains measurements from a solar power plant in India (Plant 1), covering 22 inverters from May 15 to June 17, 2020, at 15-minute intervals.
 
-![Seyreltme deneyi](gorseller/01_seyreltme.png)
+## Notebooks
 
-### 2. En küçük kareler ve Gauss eliminasyonu – [`02_en_kucuk_kareler.ipynb`](notebooks/02_en_kucuk_kareler.ipynb)
-$P = a\,G + c\,G\,(T - 25)$ modeli, normal denklemler ve kısmi pivotlamalı Gauss eliminasyonuyla çözüldü.
+### 1. Numerical Integration – [`01_integrasyon.ipynb`](notebooks/01_integrasyon.ipynb)
 
-> En küçük kareler ile bulunan sıcaklık katsayısı β ≈ 0,0046/°C, silikon panellerin bilinen değeriyle uyumlu.
+Daily energy production (kWh) is estimated using the trapezoidal rule, Simpson's rule, and Romberg integration. The results are compared with the energy readings recorded by the inverters.
 
-![Model ve ölçüm](gorseller/02_model.png)
+> With 15-minute sampling intervals, the trapezoidal rule estimates daily energy production with approximately 0.3% error, outperforming Simpson's rule and Romberg integration on this dataset.
 
-### 3. Kök bulma – [`03_kok_bulma.ipynb`](notebooks/03_kok_bulma.ipynb)
-Bisection, Newton ve secant ile günün enerjisinin yarısının üretildiği saat bulundu.
+![Sampling interval experiment](gorseller/01_seyreltme.png)
 
-> Newton yöntemi, türev olarak ölçülen gücü kullanarak yarı enerji saatini 4–5 iterasyonda buluyor.
+### 2. Least Squares and Gaussian Elimination – [`02_en_kucuk_kareler.ipynb`](notebooks/02_en_kucuk_kareler.ipynb)
 
-![Yarı enerji saati](gorseller/03_yari_enerji.png)
+The mathematical model
 
-## Çalıştırma
+$$P = aG + cG(T - 25)$$
 
-1. Kaggle'dan `Plant_1_Generation_Data.csv` ve `Plant_1_Weather_Sensor_Data.csv` dosyalarını indirip `data/` klasörüne (ya da defterlerin yanına) koyun.
-2. `pip install numpy pandas scipy matplotlib jupyter`
-3. `notebooks/` klasöründeki defterleri açın.
+is fitted using the normal equations and Gaussian elimination with partial pivoting.
+
+> The estimated temperature coefficient, β ≈ 0.0046/°C, is consistent with typical values for silicon solar panels.
+
+![Model predictions and measured values](gorseller/02_model.png)
+
+### 3. Root Finding – [`03_kok_bulma.ipynb`](notebooks/03_kok_bulma.ipynb)
+
+The bisection, Newton, and secant methods are used to determine the time at which half of the total daily energy has been generated.
+
+> Newton's method, using measured power as the derivative of cumulative energy, converges to the half-energy time within 4–5 iterations.
+
+![Half-energy time](gorseller/03_yari_enerji.png)
+
+## Getting Started
+
+1. Download `Plant_1_Generation_Data.csv` and `Plant_1_Weather_Sensor_Data.csv` from Kaggle and place them in the `data/` directory or alongside the notebooks.
+2. Install the required dependencies:
+
+   ```bash
+   pip install numpy pandas scipy matplotlib jupyter
+   ```
+
+3. Open and run the notebooks in the `notebooks/` directory.
+
+## Repository Structure
 
 ```
 gunes-numerik-analiz/
@@ -40,6 +59,6 @@ gunes-numerik-analiz/
 │   ├── 01_integrasyon.ipynb
 │   ├── 02_en_kucuk_kareler.ipynb
 │   └── 03_kok_bulma.ipynb
-├── gorseller/   # README'deki grafikler
-└── data/        # CSV'ler (repoya konmaz)
+├── gorseller/   # Figures used in the README
+└── data/        # CSV files (not included in the repository)
 ```
